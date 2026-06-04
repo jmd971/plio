@@ -25,7 +25,7 @@ function useHashRoute() {
 export default function App() {
   const route = useHashRoute();
   const toast = useToast();
-  const [auth, setAuth] = useState(() => sessionStorage.getItem("axecime_auth") === "1");
+  const [auth, setAuth] = useState(() => sessionStorage.getItem("plio_auth") === "1");
   const [dossiers, setDossiers] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -117,7 +117,7 @@ export default function App() {
         onValidate={handleValidate}
         onNewDossier={() => setShowNew(true)}
         onLogout={() => {
-          sessionStorage.removeItem("axecime_auth");
+          sessionStorage.removeItem("plio_auth");
           setAuth(false);
         }}
         onRefresh={loadDossiers}
