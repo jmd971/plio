@@ -31,10 +31,10 @@ function InvalidLink() {
         Lien invalide ou expiré
       </div>
       <div style={{ color: "var(--muted)", fontSize: 14, textAlign: "center", maxWidth: 340, lineHeight: 1.5 }}>
-        Ce lien n'est plus valide. Contactez votre conseiller AXECIME pour en obtenir un nouveau.
+        Ce lien n'est plus valide. Contactez votre conseiller pour en obtenir un nouveau.
       </div>
       <div className="card" style={{ padding: "12px 22px", marginTop: 4 }}>
-        <span style={{ fontWeight: 700, color: "var(--brand)" }}>axecime.com</span>
+        <span style={{ fontWeight: 700, color: "var(--brand)" }}>plio.fr</span>
       </div>
     </div>
   );
