@@ -115,17 +115,17 @@ ANTHROPIC_API_KEY=   # Clé API Anthropic (pour /api/chat.js)
 ### Workflow GitHub (OBLIGATOIRE)
 - **Toutes les modifications se font via `gh api` ou l'interface web GitHub**
 - **Jamais de `git clone` en local**
-- Toujours créer les fichiers avec `gh api repos/jmd971/axecime-agent/contents/<path>` (PUT)
+- Toujours créer les fichiers avec `gh api repos/jmd971/plio/contents/<path>` (PUT)
 - Pour modifier un fichier existant : récupérer son SHA d'abord, puis PUT avec le SHA
 
 ```bash
 # Lire un fichier
-gh api repos/jmd971/axecime-agent/contents/<path> --jq '.content' | base64 -d
+gh api repos/jmd971/plio/contents/<path> --jq '.content' | base64 -d
 
 # Créer ou modifier un fichier
 CONTENT=$(echo '<contenu>' | base64)
-SHA=$(gh api repos/jmd971/axecime-agent/contents/<path> --jq '.sha' 2>/dev/null || echo "")
-gh api repos/jmd971/axecime-agent/contents/<path> \
+SHA=$(gh api repos/jmd971/plio/contents/<path> --jq '.sha' 2>/dev/null || echo "")
+gh api repos/jmd971/plio/contents/<path> \
   -X PUT \
   -f message="<commit message>" \
   -f content="$CONTENT" \
