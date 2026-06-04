@@ -97,4 +97,4 @@ export const DOSSIER_TYPES = {
 };
 
 // Mot de passe espace conseiller (conservé tel quel)
-export const CONSEILLER_PASSWORD = "axecime2025";
+export const CONSEILLER_PASSWORD = "plio2026";
