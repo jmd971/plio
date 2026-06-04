@@ -65,34 +65,16 @@ export function DossierDetail({ dossier: d, onValidate, onDelete }) {
       d.tel.replace(/\D/g, "") +
       "?text=" +
       encodeURIComponent(
-        "Bonjour " + d.prenom + " ! 👋
-
-Voici votre lien sécurisé Plio pour déposer vos documents :
-" +
+        `Bonjour ${d.prenom} ! 👋\n\nVoici votre lien sécurisé Plio pour déposer vos documents :\n` +
           clientUrl +
-          "
-
-Vous devrez confirmer votre date de naissance pour y accéder.
-Lien valable 30 jours.
-
-L'équipe Plio"
+          `\n\nVous devrez confirmer votre date de naissance pour y accéder.\nLien valable 30 jours.\n\nL'équipe Plio`
       );
   const mailUrl =
     d.email &&
     "mailto:" + d.email + "?subject=Vos documents Plio&body=" +
       encodeURIComponent(
-        "Bonjour " + d.prenom + ",
-
-Voici votre lien sécurisé :
-
-" + clientUrl +
-          "
-
-Confirmez votre date de naissance pour y accéder.
-Lien valable 30 jours.
-
-Cordialement,
-L'équipe Plio"
+        `Bonjour ${d.prenom},\n\nVoici votre lien sécurisé :\n\n` + clientUrl +
+          `\n\nConfirmez votre date de naissance pour y accéder.\nLien valable 30 jours.\n\nCordialement,\nL'équipe Plio`
       );
 
   const bycat = d.pieces.reduce((acc, p) => {
