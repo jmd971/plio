@@ -204,7 +204,7 @@ export function ClientChecklist({ dossier }) {
               Dossier complet !
             </div>
             <div style={{ color: "var(--muted)", fontSize: 13.5, marginTop: 4 }}>
-              Merci {dossier.prenom}. Votre conseiller AXECIME vous contactera sous 24–48h.
+              Merci {dossier.prenom}. Votre conseiller vous contactera sous 24–48h.
             </div>
           </div>
         )}
