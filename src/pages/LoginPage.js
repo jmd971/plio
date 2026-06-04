@@ -4,7 +4,6 @@ import { Logo } from "../ui/Logo";
 import { Button } from "../ui/Button";
 import { CONSEILLER_PASSWORD } from "../data/dossierTypes";
 
-// Page de connexion de l'espace conseiller.
 export function LoginPage({ onLogin }) {
   const [pwd, setPwd] = useState("");
   const [err, setErr] = useState(false);
@@ -12,7 +11,7 @@ export function LoginPage({ onLogin }) {
 
   const handle = () => {
     if (pwd === CONSEILLER_PASSWORD) {
-      sessionStorage.setItem("axecime_auth", "1");
+      sessionStorage.setItem("plio_auth", "1");
       onLogin();
     } else {
       setErr(true);
@@ -30,40 +29,53 @@ export function LoginPage({ onLogin }) {
         justifyContent: "center",
         padding: 20,
         background:
-          "radial-gradient(120% 80% at 100% 0%, rgba(232,85,10,0.06) 0%, transparent 50%)," +
-          "radial-gradient(120% 90% at 0% 100%, rgba(0,59,142,0.08) 0%, transparent 55%)," +
+          "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.18) 0%, transparent 60%)," +
+          "radial-gradient(ellipse 60% 40% at 100% 100%, rgba(165,243,252,0.06) 0%, transparent 50%)," +
           "var(--bg)",
       }}
     >
       <div
-        className={"card-lg" + (shake ? " anim-shake" : " anim-slide-in")}
-        style={{ width: 400, maxWidth: "100%", padding: 38, boxShadow: "var(--shadow-xl)" }}
+        className={"card card-glass" + (shake ? " anim-shake" : " anim-slide-in")}
+        style={{ width: 400, maxWidth: "100%", padding: 40, boxShadow: "var(--shadow-xl), var(--shadow-glow)" }}
       >
-        <div className="col" style={{ alignItems: "center", textAlign: "center", marginBottom: 28 }}>
-          <Logo size={56} showText={false} />
-          <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 24, color: "var(--heading)", marginTop: 16 }}>
-            AXECIME
+        <div className="col" style={{ alignItems: "center", textAlign: "center", marginBottom: 32 }}>
+          <Logo size={52} showText={false} />
+          <div
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 700,
+              fontSize: 26,
+              color: "var(--heading)",
+              marginTop: 16,
+              letterSpacing: "-0.04em",
+            }}
+          >
+            plio
+          </div>
+          <div style={{ color: "var(--muted)", fontSize: 13, marginTop: 4 }}>
+            Portail conseillers
           </div>
           <div
             className="row gap-6"
             style={{
-              marginTop: 8,
-              fontSize: 12.5,
+              marginTop: 14,
+              fontSize: 12,
               fontWeight: 600,
-              color: "var(--brand)",
+              color: "var(--brand-light)",
               background: "var(--brand-soft)",
-              padding: "4px 12px",
+              padding: "5px 14px",
               borderRadius: 20,
+              border: "1px solid rgba(99,102,241,0.2)",
             }}
           >
-            <ShieldCheck size={14} /> Espace Conseillers
+            <ShieldCheck size={13} /> Espace Conseillers
           </div>
         </div>
 
         <label className="field-label">Mot de passe</label>
         <div style={{ position: "relative" }}>
           <Lock
-            size={17}
+            size={16}
             color="var(--faint)"
             style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}
           />
@@ -71,26 +83,27 @@ export function LoginPage({ onLogin }) {
             type="password"
             value={pwd}
             autoFocus
-            onChange={(e) => {
-              setPwd(e.target.value);
-              setErr(false);
-            }}
+            onChange={(e) => { setPwd(e.target.value); setErr(false); }}
             onKeyDown={(e) => e.key === "Enter" && handle()}
             placeholder="••••••••••"
             className={"input" + (err ? " error" : "")}
             style={{ paddingLeft: 42 }}
           />
         </div>
-        {err && <div style={{ color: "var(--red)", fontSize: 12.5, marginTop: 7 }}>Mot de passe incorrect</div>}
+        {err && (
+          <div style={{ color: "var(--red)", fontSize: 12.5, marginTop: 7, display: "flex", alignItems: "center", gap: 6 }}>
+            Mot de passe incorrect
+          </div>
+        )}
 
-        <div style={{ marginTop: 22 }}>
+        <div style={{ marginTop: 24 }}>
           <Button size="lg" onClick={handle}>
-            Accéder au tableau de bord <ArrowRight size={17} />
+            Accéder au tableau de bord <ArrowRight size={16} />
           </Button>
         </div>
 
-        <div className="row gap-6" style={{ justifyContent: "center", color: "var(--faint)", fontSize: 11.5, marginTop: 20 }}>
-          <Lock size={12} /> Accès réservé aux conseillers AXECIME
+        <div className="row gap-6" style={{ justifyContent: "center", color: "var(--faint)", fontSize: 11.5, marginTop: 22 }}>
+          <Lock size={11} /> Accès réservé aux conseillers
         </div>
       </div>
     </div>
