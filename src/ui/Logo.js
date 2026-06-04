@@ -1,8 +1,6 @@
 import React from "react";
 
-// Logo Plio : marque géométrique P + wordmark optionnel.
-function PloMark({ size }) {
-  const r = size * 0.3;
+function PlioMark({ size }) {
   return (
     <svg
       width={size * 0.52}
@@ -12,7 +10,6 @@ function PloMark({ size }) {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* Lettre P géométrique : tige verticale + arc fermé */}
       <rect x="5" y="3" width="3" height="18" rx="1.5" fill="white" />
       <path
         d="M8 4 C8 4 19 4 19 10 C19 16 8 16 8 16"
@@ -21,7 +18,6 @@ function PloMark({ size }) {
         strokeLinecap="round"
         fill="none"
       />
-      {/* Point accent indigo clair */}
       <circle cx="20" cy="4" r="2.2" fill="rgba(165,243,252,0.9)" />
     </svg>
   );
@@ -31,7 +27,7 @@ export function Logo({ size = 40, showText = true, subtitle }) {
   return (
     <div className="row gap-12">
       <div className="logo-mark" style={{ width: size, height: size }}>
-        <PloMark size={size} />
+        <PlioMark size={size} />
       </div>
       {showText && (
         <div className="col" style={{ gap: 1 }}>
