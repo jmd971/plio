@@ -47,7 +47,7 @@ export function DobVerification({ prenom, dobHash, onVerified }) {
         <div className="col" style={{ alignItems: "center", textAlign: "center", marginBottom: 24 }}>
           <Logo size={54} showText={false} />
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 22, color: "var(--heading)", marginTop: 14 }}>
-            AXECIME
+            plio
           </div>
           <div style={{ color: "var(--muted)", fontSize: 13, marginTop: 3 }}>
             Espace documents sécurisé
@@ -82,7 +82,7 @@ export function DobVerification({ prenom, dobHash, onVerified }) {
             <Lock size={26} color="var(--red)" style={{ marginBottom: 8 }} />
             <div style={{ color: "var(--red)", fontWeight: 700, fontSize: 14 }}>Accès temporairement bloqué</div>
             <div style={{ color: "var(--muted)", fontSize: 12.5, marginTop: 6 }}>
-              Trop de tentatives. Contactez votre conseiller AXECIME.
+              Trop de tentatives. Contactez votre conseiller.
             </div>
           </div>
         ) : (
