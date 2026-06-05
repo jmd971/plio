@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
   Mail, Phone, Cake, FolderOpen, Package, Download, Link2, Copy, Check,
   MessageCircle, Folder, FileText, ExternalLink, Trash2, CheckCircle2, XCircle,
@@ -8,6 +8,7 @@ import { StatusBadge, Pill } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { DOSSIER_TYPES } from "../data/dossierTypes";
 import { getClientUrl } from "../lib/token";
+import { apiUploadFile } from "../lib/api";
 import { formatDateFR, formatSize, cleanCategory } from "../lib/format";
 import { useToast } from "../ui/Toast";
 import { useConfirm } from "../ui/Confirm";
@@ -59,22 +60,60 @@ export function DossierDetail({ dossier: d, onValidate, onDelete }) {
     }
   };
 
+  const handleManualUpload = useCallback(async (code, file) => {
+    if (!file) return;
+    setSaving(code);
+    try {
+      const data = await apiUploadFile(file, d, code);
+      await onValidate(d.id, code, "RECU", {
+        url: data.url,
+        name: file.name,
+        size: file.size,
+        uploadedAt: new Date().toISOString(),
+        source: "conseiller",
+      });
+      toast.success("Document ajouté manuellement ✓");
+    } catch (e) {
+      toast.error("Erreur upload : " + e.message);
+    } finally {
+      setSaving(null);
+    }
+  }, [d, onValidate]);
+
   const waUrl =
     d.tel &&
     "https://wa.me/" +
       d.tel.replace(/\D/g, "") +
       "?text=" +
       encodeURIComponent(
-        `Bonjour ${d.prenom} ! 👋\n\nVoici votre lien sécurisé Plio pour déposer vos documents :\n` +
+        `Bonjour ${d.prenom} ! 👋
+
+Voici votre lien sécurisé Plio pour déposer vos documents :
+` +
           clientUrl +
-          `\n\nVous devrez confirmer votre date de naissance pour y accéder.\nLien valable 30 jours.\n\nL'équipe Plio`
+          `
+
+Vous devrez confirmer votre date de naissance pour y accéder.
+Lien valable 30 jours.
+
+L'équipe Plio`
       );
   const mailUrl =
     d.email &&
     "mailto:" + d.email + "?subject=Vos documents Plio&body=" +
       encodeURIComponent(
-        `Bonjour ${d.prenom},\n\nVoici votre lien sécurisé :\n\n` + clientUrl +
-          `\n\nConfirmez votre date de naissance pour y accéder.\nLien valable 30 jours.\n\nCordialement,\nL'équipe Plio`
+        `Bonjour ${d.prenom},
+
+Voici votre lien sécurisé :
+
+` + clientUrl +
+          `
+
+Confirmez votre date de naissance pour y accéder.
+Lien valable 30 jours.
+
+Cordialement,
+L'équipe Plio`
       );
 
   const bycat = d.pieces.reduce((acc, p) => {
@@ -222,6 +261,31 @@ export function DossierDetail({ dossier: d, onValidate, onDelete }) {
                       </Button>
                       <Button variant="danger" size="sm" loading={saving === p.code} onClick={() => handlePiece(p.code, "REFUSE")} icon={XCircle}>
                         Refuser
+                      </Button>
+                    </>
+                  )}
+                  {p.status === "MANQUANT" && (
+                    <>
+                      <input
+                        id={"upload-" + p.code}
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                          const f = e.target.files && e.target.files[0];
+                          if (f) handleManualUpload(p.code, f);
+                          e.target.value = "";
+                        }}
+                      />
+                      <Button
+                        variant="soft"
+                        size="sm"
+                        loading={saving === p.code}
+                        icon={Download}
+                        onClick={() => document.getElementById("upload-" + p.code).click()}
+                        title="Ajouter ce document reçu par email"
+                      >
+                        Ajouter
                       </Button>
                     </>
                   )}
