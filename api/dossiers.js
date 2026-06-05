@@ -41,6 +41,8 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: "Données manquantes" });
       }
       await client.set("dossier:" + dossier.id, JSON.stringify(dossier));
+      // Eviter les doublons : supprimer les occurrences existantes avant d'ajouter
+      await client.lRem("dossiers:ids", 0, dossier.id);
       await client.lPush("dossiers:ids", dossier.id);
       await client.quit();
       return res.status(201).json(dossier);
