@@ -53,8 +53,8 @@ function PieceRow({ piece, dossier, pieces, onUploaded }) {
         alignItems: "center",
         gap: 12,
         flexWrap: "wrap",
-        borderColor: done ? "#C4ECD9" : "var(--border)",
-        background: done ? "#FBFEFC" : "var(--surface)",
+        borderColor: done ? "rgba(34,197,94,0.35)" : "var(--border)",
+        background: done ? "rgba(34,197,94,0.07)" : "var(--surface)",
       }}
     >
       <div
@@ -65,7 +65,7 @@ function PieceRow({ piece, dossier, pieces, onUploaded }) {
           borderRadius: 10,
           justifyContent: "center",
           flexShrink: 0,
-          background: done ? "#E7F8F0" : "var(--bg)",
+          background: done ? "rgba(34,197,94,0.12)" : "var(--bg)",
           color: done ? "var(--green)" : "var(--faint)",
         }}
       >
@@ -73,7 +73,7 @@ function PieceRow({ piece, dossier, pieces, onUploaded }) {
       </div>
 
       <div className="grow">
-        <div style={{ color: "var(--text)", fontSize: 13.5, fontWeight: 600 }}>{piece.label}</div>
+        <div style={{ color: done ? "var(--heading)" : "var(--text)", fontSize: 13.5, fontWeight: done ? 500 : 600 }}>{piece.label}</div>
         {piece.file && piece.file.name ? (
           <div className="row gap-6" style={{ color: "var(--muted)", fontSize: 11.5, marginTop: 3 }}>
             <FileText size={12} />
@@ -223,7 +223,7 @@ export function ClientChecklist({ dossier }) {
                     color: full ? "var(--green)" : "var(--muted)",
                     fontSize: 11.5,
                     fontWeight: 600,
-                    background: full ? "#E7F8F0" : "var(--bg)",
+                    background: full ? "rgba(34,197,94,0.12)" : "var(--bg)",
                     padding: "1px 8px",
                     borderRadius: 20,
                   }}
