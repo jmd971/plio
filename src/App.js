@@ -54,9 +54,9 @@ export default function App() {
   if (clientMatch) return <ClientPortal token={clientMatch[1]} />;
   if (!auth) return <LoginPage onLogin={() => setAuth(true)} />;
 
-  const handleValidate = async (dossierId, pieceCode, newStatus) => {
+  const handleValidate = async (dossierId, pieceCode, newStatus, fileData) => {
     try {
-      const updated = await apiUpdatePiece(dossierId, pieceCode, newStatus);
+      const updated = await apiUpdatePiece(dossierId, pieceCode, newStatus, fileData);
       setDossiers((prev) => prev.map((d) => (d.id === dossierId ? updated : d)));
     } catch (e) {
       console.error("Erreur mise à jour:", e);
