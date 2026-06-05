@@ -278,7 +278,7 @@ L'équipe Plio`
                         }}
                       />
                       <Button
-                        variant="soft"
+                        variant="upload"
                         size="sm"
                         loading={saving === p.code}
                         icon={Download}
