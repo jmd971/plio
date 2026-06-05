@@ -33,11 +33,11 @@ export async function apiGetDossier(id) {
   return res.json();
 }
 
-export async function apiUpdatePiece(id, pieceCode, newStatus) {
+export async function apiUpdatePiece(id, pieceCode, newStatus, fileData) {
   const res = await fetch("/api/dossier", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id, pieceCode, newStatus }),
+    body: JSON.stringify({ id, pieceCode, newStatus, ...(fileData ? { fileData } : {}) }),
   });
   if (!res.ok) throw new Error("Erreur mise à jour");
   return res.json();
