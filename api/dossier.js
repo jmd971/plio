@@ -57,7 +57,7 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
-  const { id, pieceCode, newStatus } = req.body;
+  const { id, pieceCode, newStatus, fileData } = req.body;
   if (!id || !pieceCode || !newStatus) {
     return res.status(400).json({ error: "Paramètres manquants" });
   }
@@ -74,7 +74,7 @@ module.exports = async function handler(req, res) {
 
     const dossier = JSON.parse(raw);
     const pieces = dossier.pieces.map(p =>
-      p.code === pieceCode ? { ...p, status: newStatus } : p
+      p.code === pieceCode ? { ...p, status: newStatus, ...(fileData ? { file: fileData } : {}) } : p
     );
     const allDone = pieces.every(p => p.status === "VALIDE");
     const anyMiss = pieces.some(p => p.status === "MANQUANT");
