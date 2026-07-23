@@ -1,4 +1,4 @@
-import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse, Hammer, Briefcase } from "lucide-react";
+import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse, Hammer, Briefcase, Users } from "lucide-react";
 
 // ── TYPES DE DOSSIERS ───────────────────────────────────────────────────────
 // Chaque type définit son libellé, son icône (lucide), une couleur d'accent et
@@ -30,6 +30,7 @@ export const DOSSIER_TYPES = {
     label: "Assurance de Prêt",
     Icon: ShieldCheck,
     accent: "#0E9F6E",
+    supportsCoEmprunteur: true,
     pieces: [
       { code: "CNI", label: "Carte nationale d'identité", type: "IDENTITE", category: "01-Identité" },
       { code: "LIVRET_FAMILLE", label: "Livret de famille", type: "IDENTITE", category: "01-Identité" },
@@ -177,7 +178,57 @@ export const DOSSIER_TYPES = {
       { code: "CONTRAT_SIGNE", label: "Contrat signé", type: "CONTRACTUEL", category: "06-Contrat" },
     ],
   },
+  RC_PRO_ASSOCIATION: {
+    label: "RC Pro Association",
+    Icon: Users,
+    accent: "#7E22CE",
+    pieces: [
+      { code: "CNI_PRESIDENT", label: "Pièce d'identité du président", type: "IDENTITE", category: "01-Identité" },
+      { code: "CNI_REPRESENTANT", label: "Pièce d'identité du représentant ayant mandat au nom de l'association", type: "IDENTITE", category: "01-Identité" },
+      { code: "COORD_BUREAU", label: "Coordonnées du Bureau", type: "ASSOCIATION", category: "02-Association" },
+      { code: "COORD_TRESORIER", label: "Coordonnées du trésorier", type: "ASSOCIATION", category: "02-Association" },
+      { code: "STATUTS", label: "Statuts de l'association", type: "ASSOCIATION", category: "02-Association" },
+      { code: "FICHE_INSEE", label: "Fiche INSEE", type: "ASSOCIATION", category: "02-Association" },
+      { code: "ENREG_PREFECTURE", label: "Enregistrement à la Préfecture", type: "ASSOCIATION", category: "02-Association" },
+      { code: "RIB_ASSOCIATION", label: "RIB de l'association", type: "BANQUE", category: "03-Bancaire" },
+      { code: "RELEVE_SINISTRALITE", label: "Relevé de sinistralité (si assurance précédente)", type: "ASSURANCE", category: "04-Assurance" },
+      { code: "ATTEST_ASSUR", label: "Dernière attestation d'assurance souscrite", type: "ASSURANCE", category: "04-Assurance" },
+      { code: "SUPPORTS_COMM", label: "Plaquette commerciale et/ou prospectus", type: "ACTIVITE", category: "05-Activité" },
+      { code: "SUPPORTS_DIGITAL", label: "Mail type de proposition client et/ou site internet", type: "ACTIVITE", category: "05-Activité" },
+    ],
+  },
 };
+
+// Construit la liste des pièces d'un dossier à partir de son type.
+// Pour les types qui supportent le co-emprunteur (ex. Assurance de Prêt), si
+// `opts.coEmprunteur` est vrai, la liste est dupliquée par emprunteur avec des
+// codes uniques (`__E1`/`__E2`) et des catégories distinctes pour l'affichage.
+export function buildPieces(typeKey, opts = {}) {
+  const def = DOSSIER_TYPES[typeKey];
+  if (!def) return [];
+  if (!def.supportsCoEmprunteur || !opts.coEmprunteur) {
+    return def.pieces.map((p) => ({ ...p, status: "MANQUANT" }));
+  }
+  const labels =
+    opts.labels && opts.labels.length ? opts.labels : ["Emprunteur 1", "Emprunteur 2"];
+  const out = [];
+  labels.forEach((who, i) => {
+    const n = i + 1;
+    def.pieces.forEach((p) => {
+      const num = (p.category.match(/^(\d+)-/) || [null, "00"])[1];
+      const rest = (p.category || "Autres").replace(/^\d+-/, "");
+      out.push({
+        ...p,
+        code: p.code + "__E" + n,
+        borrower: n,
+        borrowerLabel: who,
+        category: n + num + "-" + who + " · " + rest,
+        status: "MANQUANT",
+      });
+    });
+  });
+  return out;
+}
 
 // Mot de passe espace conseiller (conservé tel quel)
 export const CONSEILLER_PASSWORD = "plio2026";
