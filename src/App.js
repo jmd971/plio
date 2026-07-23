@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DOSSIER_TYPES } from "./data/dossierTypes";
+import { DOSSIER_TYPES, buildPieces } from "./data/dossierTypes";
 import { generateToken } from "./lib/token";
 import { genId } from "./lib/format";
 import {
@@ -67,11 +67,20 @@ export default function App() {
   const handleCreate = async (form) => {
     setSavingNew(true);
     try {
+      const supportsCo = DOSSIER_TYPES[form.type] && DOSSIER_TYPES[form.type].supportsCoEmprunteur;
+      const coEmprunteur = !!(supportsCo && form.coEmprunteur);
+      const labels = coEmprunteur
+        ? [
+            (form.prenom + " " + form.nom).trim() || "Emprunteur 1",
+            ((form.coPrenom || "") + " " + (form.coNom || "")).trim() || "Emprunteur 2",
+          ]
+        : undefined;
       const newD = {
         id: "dos-" + genId(),
         ...form,
+        coEmprunteur,
         statut: "EN_COURS",
-        pieces: DOSSIER_TYPES[form.type].pieces.map((p) => ({ ...p, status: "MANQUANT" })),
+        pieces: buildPieces(form.type, { coEmprunteur, labels }),
       };
       newD.token = generateToken(newD);
       const saved = await apiCreateDossier(newD);
