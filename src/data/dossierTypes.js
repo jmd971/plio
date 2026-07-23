@@ -87,12 +87,23 @@ export const DOSSIER_TYPES = {
       { code: "DIVERS", label: "Document complémentaire (si nécessaire)", type: "DIVERS", category: "05-Divers" },
     ],
   },
-  MUTUELLE: {
-    label: "Mutuelle",
+  MUTUELLE_INDIVIDUELLE: {
+    label: "Mutuelle individuelle",
     Icon: HeartPulse,
     accent: "#0D9488",
     pieces: [
-      { code: "CNI", label: "Pièce d'identité (recto-verso)", type: "IDENTITE", category: "01-Identité" },
+      { code: "CNI", label: "Pièce d'identité valide (recto-verso)", type: "IDENTITE", category: "01-Identité" },
+      { code: "CARTE_VITALE", label: "Carte Vitale", type: "SECU", category: "02-Sécurité sociale" },
+      { code: "ATTEST_SS", label: "Attestation de sécurité sociale", type: "SECU", category: "02-Sécurité sociale" },
+      { code: "RIB", label: "RIB", type: "BANQUE", category: "03-Bancaire" },
+    ],
+  },
+  MUTUELLE_COLLECTIVE: {
+    label: "Mutuelle collective",
+    Icon: HeartPulse,
+    accent: "#0F766E",
+    pieces: [
+      { code: "CNI", label: "Pièce d'identité valide (recto-verso)", type: "IDENTITE", category: "01-Identité" },
       { code: "CARTE_VITALE", label: "Carte Vitale", type: "SECU", category: "02-Sécurité sociale" },
       { code: "ATTEST_SS", label: "Attestation de sécurité sociale", type: "SECU", category: "02-Sécurité sociale" },
       { code: "RIB_ASSURE", label: "RIB de l'assuré", type: "BANQUE", category: "03-Bancaire" },
