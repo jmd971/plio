@@ -31,12 +31,12 @@ export const DOSSIER_TYPES = {
     Icon: ShieldCheck,
     accent: "#0E9F6E",
     pieces: [
-      { code: "CNI", label: "Carte d'identité (recto-verso)", type: "IDENTITE", category: "01-Identité" },
-      { code: "OFFRE_PRET", label: "Offre de prêt bancaire", type: "FINANCEMENT", category: "02-Financement" },
-      { code: "TABLEAU_AMORT", label: "Tableau d'amortissement", type: "FINANCEMENT", category: "02-Financement" },
-      { code: "CERTIFICAT_EMPLOI", label: "Certificat d'emploi", type: "REVENUS", category: "03-Revenus" },
-      { code: "BULL_SAL_1", label: "Bulletin de salaire M-1", type: "REVENUS", category: "03-Revenus" },
-      { code: "QUESTIONNAIRE_SANTE", label: "Questionnaire de santé complété", type: "SANTE", category: "04-Santé" },
+      { code: "CNI", label: "Carte nationale d'identité", type: "IDENTITE", category: "01-Identité" },
+      { code: "LIVRET_FAMILLE", label: "Livret de famille", type: "IDENTITE", category: "01-Identité" },
+      { code: "TABLEAU_AMORT", label: "Tableau d'amortissement des prêts en cours", type: "FINANCEMENT", category: "02-Financement" },
+      { code: "OFFRE_PRET", label: "Offres de prêt", type: "FINANCEMENT", category: "02-Financement" },
+      { code: "ADHESION_PREC", label: "Adhésion assurance de prêt précédente", type: "ASSURANCE", category: "03-Assurance" },
+      { code: "CERTIFICAT_TRAVAIL", label: "Certificat de travail", type: "EMPLOI", category: "04-Emploi" },
     ],
   },
   DEFISC: {
