@@ -1,4 +1,4 @@
-import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse, Hammer } from "lucide-react";
+import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse, Hammer, Briefcase } from "lucide-react";
 
 // ── TYPES DE DOSSIERS ───────────────────────────────────────────────────────
 // Chaque type définit son libellé, son icône (lucide), une couleur d'accent et
@@ -151,8 +151,30 @@ export const DOSSIER_TYPES = {
       { code: "JUSTIF_EXP_DIPLOME", label: "Justificatif d'expérience (diplôme)", type: "EXPERIENCE", category: "04-Expérience" },
       { code: "JUSTIF_EXP_EMPLOYEUR", label: "Justificatif d'expérience (certificat employeur, fiche de paie)", type: "EXPERIENCE", category: "04-Expérience" },
       { code: "QUESTIONNAIRE_RCD", label: "Questionnaire RC Décennale", type: "CONTRACTUEL", category: "05-Contrat" },
-      { code: "DEVIS_AXECIME", label: "Devis AXECIME signé", type: "CONTRACTUEL", category: "05-Contrat" },
+      { code: "DEVIS_AGENCE", label: "Devis agence signé", type: "CONTRACTUEL", category: "05-Contrat" },
       { code: "CP_CONTRAT", label: "Conditions particulières (contrat) signées", type: "CONTRACTUEL", category: "05-Contrat" },
+    ],
+  },
+  RC_PRO: {
+    label: "RC Pro",
+    Icon: Briefcase,
+    accent: "#0891B2",
+    pieces: [
+      { code: "CNI_GERANT", label: "Pièce d'identité du gérant", type: "IDENTITE", category: "01-Identité" },
+      { code: "KBIS", label: "Extrait Kbis (< 3 mois si possible)", type: "SOCIETE", category: "02-Société" },
+      { code: "DBE", label: "Déclaration des bénéficiaire(s) effectif(s)", type: "SOCIETE", category: "02-Société" },
+      { code: "RIB_SOCIETE", label: "RIB de la société", type: "BANQUE", category: "02-Société" },
+      { code: "RELEVE_SINISTRALITE", label: "Relevé de sinistralité (si assurance précédente)", type: "ASSURANCE", category: "03-Assurance" },
+      { code: "ATTEST_ASSUR", label: "Dernière attestation d'assurance souscrite", type: "ASSURANCE", category: "03-Assurance" },
+      { code: "JUSTIF_EXP_RECO", label: "Justificatif d'expérience (recommandation)", type: "EXPERIENCE", category: "04-Expérience" },
+      { code: "JUSTIF_EXP_DIPLOME", label: "Justificatif d'expérience (diplômes)", type: "EXPERIENCE", category: "04-Expérience" },
+      { code: "JUSTIF_EXP_EMPLOYEUR", label: "Justificatif d'expérience (attestations d'employeur)", type: "EXPERIENCE", category: "04-Expérience" },
+      { code: "JUSTIF_EXP_PAIE", label: "Justificatif d'expérience (fiches de paie)", type: "EXPERIENCE", category: "04-Expérience" },
+      { code: "JUSTIF_EXP_CV", label: "Justificatif d'expérience (CV)", type: "EXPERIENCE", category: "04-Expérience" },
+      { code: "MODELE_MARCHE", label: "Modèle de marché ou convention de prestations type", type: "ACTIVITE", category: "05-Activité" },
+      { code: "SUPPORTS_COMM", label: "Supports commerciaux (plaquette, prospectus, mail type, site internet…)", type: "ACTIVITE", category: "05-Activité" },
+      { code: "DEVIS_AGENCE", label: "Devis agence signé", type: "CONTRACTUEL", category: "06-Contrat" },
+      { code: "CONTRAT_SIGNE", label: "Contrat signé", type: "CONTRACTUEL", category: "06-Contrat" },
     ],
   },
 };
