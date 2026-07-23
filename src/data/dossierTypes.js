@@ -1,4 +1,4 @@
-import { Home, ShieldCheck, LineChart, RefreshCw, HardHat } from "lucide-react";
+import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse } from "lucide-react";
 
 // ── TYPES DE DOSSIERS ───────────────────────────────────────────────────────
 // Chaque type définit son libellé, son icône (lucide), une couleur d'accent et
@@ -85,6 +85,19 @@ export const DOSSIER_TYPES = {
       { code: "INVENTAIRE_MOBILIER", label: "Inventaire mobilier / liste des objets de valeur", type: "BIENS", category: "04-Biens à assurer" },
       { code: "FACTURES_VALEUR", label: "Factures ou expertises des objets de valeur", type: "BIENS", category: "04-Biens à assurer" },
       { code: "DIVERS", label: "Document complémentaire (si nécessaire)", type: "DIVERS", category: "05-Divers" },
+    ],
+  },
+  MUTUELLE: {
+    label: "Mutuelle",
+    Icon: HeartPulse,
+    accent: "#0D9488",
+    pieces: [
+      { code: "CNI", label: "Pièce d'identité (recto-verso)", type: "IDENTITE", category: "01-Identité" },
+      { code: "CARTE_VITALE", label: "Carte Vitale", type: "SECU", category: "02-Sécurité sociale" },
+      { code: "ATTEST_SS", label: "Attestation de sécurité sociale", type: "SECU", category: "02-Sécurité sociale" },
+      { code: "RIB_ASSURE", label: "RIB de l'assuré", type: "BANQUE", category: "03-Bancaire" },
+      { code: "KBIS", label: "Extrait Kbis < 3 mois de la société", type: "SOCIETE", category: "04-Société" },
+      { code: "RIB_SOCIETE", label: "RIB de la société", type: "SOCIETE", category: "04-Société" },
     ],
   },
   DOMMAGE_OUVRAGE: {
