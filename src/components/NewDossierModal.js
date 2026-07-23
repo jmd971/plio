@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Sparkles, Calendar, ShieldCheck } from "lucide-react";
+import { Sparkles, Calendar, ShieldCheck, Users } from "lucide-react";
 import { Modal } from "../ui/Modal";
 import { Button } from "../ui/Button";
 import { Field, SelectField, DobInput } from "../ui/Field";
@@ -10,9 +10,11 @@ import { formatDateFR } from "../lib/format";
 export function NewDossierModal({ onClose, onCreate, saving }) {
   const [form, setForm] = useState({
     prenom: "", nom: "", email: "", tel: "", dob: "", type: "PRET_IMMO", conseiller: "",
+    coEmprunteur: false, coPrenom: "", coNom: "",
   });
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
   const valid = form.prenom && form.nom && form.dob;
+  const supportsCo = !!(DOSSIER_TYPES[form.type] && DOSSIER_TYPES[form.type].supportsCoEmprunteur);
 
   return (
     <Modal title="Nouveau dossier client" subtitle="Créez un espace de dépôt sécurisé" icon={Sparkles} onClose={onClose} width={480}>
@@ -47,6 +49,41 @@ export function NewDossierModal({ onClose, onCreate, saving }) {
           <option key={k} value={k}>{v.label}</option>
         ))}
       </SelectField>
+
+      {supportsCo && (
+        <div
+          style={{
+            marginBottom: 14,
+            border: "1px solid var(--border)",
+            borderRadius: "var(--radius-sm)",
+            padding: "12px 14px",
+          }}
+        >
+          <label className="row gap-8" style={{ cursor: "pointer", alignItems: "center" }}>
+            <input
+              type="checkbox"
+              checked={form.coEmprunteur}
+              onChange={(e) => set("coEmprunteur", e.target.checked)}
+              style={{ width: 16, height: 16, accentColor: "var(--brand)" }}
+            />
+            <Users size={15} color="var(--brand)" />
+            <span style={{ fontSize: 13, fontWeight: 600, color: "var(--heading)" }}>
+              Dossier à deux emprunteurs (co-emprunteur)
+            </span>
+          </label>
+          {form.coEmprunteur && (
+            <>
+              <div style={{ color: "var(--muted)", fontSize: 12, margin: "8px 0 10px" }}>
+                La liste des pièces sera dupliquée pour chaque emprunteur.
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <Field label="Prénom co-emprunteur" placeholder="Sophie" value={form.coPrenom} onChange={(e) => set("coPrenom", e.target.value)} />
+                <Field label="Nom co-emprunteur" placeholder="Dupont" value={form.coNom} onChange={(e) => set("coNom", e.target.value)} />
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       <div
         className="row gap-8"
