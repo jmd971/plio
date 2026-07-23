@@ -1,4 +1,4 @@
-import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse } from "lucide-react";
+import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse, Hammer } from "lucide-react";
 
 // ── TYPES DE DOSSIERS ───────────────────────────────────────────────────────
 // Chaque type définit son libellé, son icône (lucide), une couleur d'accent et
@@ -132,6 +132,27 @@ export const DOSSIER_TYPES = {
       { code: "ASSURANCE_DECEN", label: "Attestations assurance décennale des entrepreneurs", type: "CONTRACTUEL", category: "04-Documents contractuels" },
       { code: "GFL", label: "Garantie financière de livraison (GFL)", type: "CONTRACTUEL", category: "04-Documents contractuels" },
       { code: "RIB", label: "Relevé d'Identité Bancaire", type: "FINANCEMENT", category: "05-Financement" },
+    ],
+  },
+  RC_DECENNALE: {
+    label: "RC Décennale",
+    Icon: Hammer,
+    accent: "#B91C1C",
+    pieces: [
+      { code: "CNI_GERANT", label: "Pièce d'identité du gérant", type: "IDENTITE", category: "01-Identité" },
+      { code: "CARTE_ARTISAN", label: "Carte d'artisan", type: "IDENTITE", category: "01-Identité" },
+      { code: "KBIS", label: "Extrait Kbis < 3 mois", type: "SOCIETE", category: "02-Société" },
+      { code: "DBE", label: "Déclaration des bénéficiaires effectifs de la société", type: "SOCIETE", category: "02-Société" },
+      { code: "TAMPON_ENTETE", label: "Tampon ou papier à en-tête", type: "SOCIETE", category: "02-Société" },
+      { code: "RIB_SOCIETE", label: "RIB de la société", type: "BANQUE", category: "02-Société" },
+      { code: "RELEVE_SINISTRALITE", label: "Relevé de sinistralité (RI)", type: "ASSURANCE", category: "03-Assurance" },
+      { code: "ATTEST_ASSUR", label: "Dernière attestation d'assurance", type: "ASSURANCE", category: "03-Assurance" },
+      { code: "JUSTIF_EXP_CV", label: "Justificatif d'expérience (recommandation, CV)", type: "EXPERIENCE", category: "04-Expérience" },
+      { code: "JUSTIF_EXP_DIPLOME", label: "Justificatif d'expérience (diplôme)", type: "EXPERIENCE", category: "04-Expérience" },
+      { code: "JUSTIF_EXP_EMPLOYEUR", label: "Justificatif d'expérience (certificat employeur, fiche de paie)", type: "EXPERIENCE", category: "04-Expérience" },
+      { code: "QUESTIONNAIRE_RCD", label: "Questionnaire RC Décennale", type: "CONTRACTUEL", category: "05-Contrat" },
+      { code: "DEVIS_AXECIME", label: "Devis AXECIME signé", type: "CONTRACTUEL", category: "05-Contrat" },
+      { code: "CP_CONTRAT", label: "Conditions particulières (contrat) signées", type: "CONTRACTUEL", category: "05-Contrat" },
     ],
   },
 };
