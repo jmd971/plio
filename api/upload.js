@@ -75,8 +75,9 @@ module.exports = async function handler(req, res) {
     const pieces = dossier.pieces.map(p =>
       p.code === pieceCode ? { ...p, status: "RECU", file: fileMeta } : p
     );
-    const allDone = pieces.every(p => p.status === "VALIDE");
-    const anyMiss = pieces.some(p => p.status === "MANQUANT");
+    const active = pieces.filter(p => !p.excluded);
+    const allDone = active.length > 0 && active.every(p => p.status === "VALIDE");
+    const anyMiss = active.some(p => p.status === "MANQUANT");
     const statut = allDone ? "COMPLET" : anyMiss ? "INCOMPLET" : "EN_COURS";
 
     const updated = { ...dossier, pieces, statut, updated_at: now };
