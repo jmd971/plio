@@ -301,7 +301,7 @@ L'équipe Plio`
                             </Button>
                           </>
                         )}
-                        {p.status === "MANQUANT" && (
+                        {p.status !== "RECU" && p.status !== "VALIDE" && (
                           <>
                             <input
                               id={"upload-" + p.code}
@@ -320,9 +320,9 @@ L'équipe Plio`
                               loading={saving === p.code}
                               icon={Download}
                               onClick={() => document.getElementById("upload-" + p.code).click()}
-                              title="Ajouter ce document reçu par email"
+                              title={p.status === "MANQUANT" ? "Ajouter ce document reçu par email" : "Remplacer par un document corrigé"}
                             >
-                              Ajouter
+                              {p.status === "MANQUANT" ? "Ajouter" : "Remplacer"}
                             </Button>
                           </>
                         )}
