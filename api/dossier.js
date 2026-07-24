@@ -57,8 +57,8 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Méthode non autorisée" });
   }
 
-  const { id, pieceCode, newStatus, fileData } = req.body;
-  if (!id || !pieceCode || !newStatus) {
+  const { id, pieceCode, newStatus, fileData, excluded } = req.body;
+  if (!id || !pieceCode || (newStatus == null && excluded === undefined)) {
     return res.status(400).json({ error: "Paramètres manquants" });
   }
 
@@ -73,11 +73,19 @@ module.exports = async function handler(req, res) {
     }
 
     const dossier = JSON.parse(raw);
-    const pieces = dossier.pieces.map(p =>
-      p.code === pieceCode ? { ...p, status: newStatus, ...(fileData ? { file: fileData } : {}) } : p
-    );
-    const allDone = pieces.every(p => p.status === "VALIDE");
-    const anyMiss = pieces.some(p => p.status === "MANQUANT");
+    const pieces = dossier.pieces.map(p => {
+      if (p.code !== pieceCode) return p;
+      const np = { ...p };
+      if (newStatus != null) {
+        np.status = newStatus;
+        if (fileData) np.file = fileData;
+      }
+      if (excluded !== undefined) np.excluded = !!excluded;
+      return np;
+    });
+    const active = pieces.filter(p => !p.excluded);
+    const allDone = active.length > 0 && active.every(p => p.status === "VALIDE");
+    const anyMiss = active.some(p => p.status === "MANQUANT");
     const statut = allDone ? "COMPLET" : anyMiss ? "INCOMPLET" : "EN_COURS";
 
     const updated = { ...dossier, pieces, statut };
