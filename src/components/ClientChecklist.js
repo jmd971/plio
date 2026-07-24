@@ -125,8 +125,10 @@ export function ClientChecklist({ dossier }) {
   const typeInfo = DOSSIER_TYPES[dossier.type];
   const TypeIcon = typeInfo.Icon;
 
-  const received = pieces.filter((p) => p.status !== "MANQUANT").length;
-  const pct = Math.round((received / pieces.length) * 100);
+  const visiblePieces = pieces.filter((p) => !p.excluded);
+  const total = visiblePieces.length;
+  const received = visiblePieces.filter((p) => p.status !== "MANQUANT").length;
+  const pct = total ? Math.round((received / total) * 100) : 0;
 
   const onUploaded = (code, file) => {
     setPieces((prev) =>
@@ -138,7 +140,7 @@ export function ClientChecklist({ dossier }) {
     );
   };
 
-  const bycat = pieces.reduce((acc, p) => {
+  const bycat = visiblePieces.reduce((acc, p) => {
     const c = p.category || "Autres";
     (acc[c] = acc[c] || []).push(p);
     return acc;
@@ -176,7 +178,7 @@ export function ClientChecklist({ dossier }) {
       <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "12px 18px" }}>
         <div className="row" style={{ justifyContent: "space-between", marginBottom: 6 }}>
           <span style={{ color: "var(--muted)", fontSize: 12.5 }}>
-            {received} / {pieces.length} documents reçus
+            {received} / {total} documents reçus
           </span>
           <span className="mono" style={{ color: pct === 100 ? "var(--green)" : "var(--orange)", fontSize: 12.5, fontWeight: 700 }}>
             {pct}%
