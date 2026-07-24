@@ -1,4 +1,4 @@
-import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse, Hammer, Briefcase, Users } from "lucide-react";
+import { Home, ShieldCheck, LineChart, RefreshCw, HardHat, HeartPulse, Hammer, Briefcase, Users, Car } from "lucide-react";
 
 // ── TYPES DE DOSSIERS ───────────────────────────────────────────────────────
 // Chaque type définit son libellé, son icône (lucide), une couleur d'accent et
@@ -86,6 +86,22 @@ export const DOSSIER_TYPES = {
       { code: "INVENTAIRE_MOBILIER", label: "Inventaire mobilier / liste des objets de valeur", type: "BIENS", category: "04-Biens à assurer" },
       { code: "FACTURES_VALEUR", label: "Factures ou expertises des objets de valeur", type: "BIENS", category: "04-Biens à assurer" },
       { code: "DIVERS", label: "Document complémentaire (si nécessaire)", type: "DIVERS", category: "05-Divers" },
+    ],
+  },
+  ASSUR_AUTO_MOTO: {
+    label: "Assurance Auto / Moto",
+    Icon: Car,
+    accent: "#CA8A04",
+    pieces: [
+      { code: "CNI_SOUSCRIPTEUR", label: "Pièce d'identité du souscripteur", type: "IDENTITE", category: "01-Identité & permis" },
+      { code: "PERMIS_CONDUIRE", label: "Permis de conduire (recto-verso)", type: "IDENTITE", category: "01-Identité & permis" },
+      { code: "CARTE_GRISE", label: "Carte grise provisoire ou définitive (recto-verso)", type: "VEHICULE", category: "02-Véhicule" },
+      { code: "FACTURE_VEHICULE", label: "Facture ou pro-forma du prix du véhicule", type: "VEHICULE", category: "02-Véhicule" },
+      { code: "ACTE_CESSION", label: "Acte de cession", type: "VEHICULE", category: "02-Véhicule" },
+      { code: "CONTROLE_TECHNIQUE", label: "Contrôle technique à jour", type: "VEHICULE", category: "02-Véhicule" },
+      { code: "RELEVE_INFO", label: "Relevé d'information (précédente assurance auto)", type: "ASSURANCE", category: "03-Assurance" },
+      { code: "QUESTIONNAIRE_AUTO", label: "Questionnaire Auto", type: "SOUSCRIPTION", category: "04-Souscription" },
+      { code: "RIB", label: "RIB", type: "BANQUE", category: "05-Bancaire" },
     ],
   },
   MUTUELLE_INDIVIDUELLE: {
