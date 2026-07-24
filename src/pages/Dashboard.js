@@ -80,7 +80,7 @@ function SkeletonCard() {
 }
 
 // Tableau de bord conseiller.
-export function Dashboard({ dossiers, loading, onValidate, onNewDossier, onLogout, onRefresh, onDelete, onResetDemo }) {
+export function Dashboard({ dossiers, loading, onValidate, onTogglePiece, onNewDossier, onLogout, onRefresh, onDelete, onResetDemo }) {
   const [sel, setSel] = useState(null);
   const [filter, setFilter] = useState("ALL");
   const [query, setQuery] = useState("");
@@ -229,6 +229,7 @@ export function Dashboard({ dossiers, loading, onValidate, onNewDossier, onLogou
             <DossierDetail
               dossier={selected}
               onValidate={onValidate}
+              onTogglePiece={onTogglePiece}
               onDelete={async (id) => {
                 await onDelete(id);
                 if (sel === id) setSel(null);
