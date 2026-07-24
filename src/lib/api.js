@@ -43,6 +43,17 @@ export async function apiUpdatePiece(id, pieceCode, newStatus, fileData) {
   return res.json();
 }
 
+// Marque une pièce comme requise / non requise pour ce client (excluded).
+export async function apiSetPieceExcluded(id, pieceCode, excluded) {
+  const res = await fetch("/api/dossier", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, pieceCode, excluded }),
+  });
+  if (!res.ok) throw new Error("Erreur mise à jour");
+  return res.json();
+}
+
 export async function apiDeleteDossier(id) {
   const res = await fetch("/api/dossier?id=" + encodeURIComponent(id), { method: "DELETE" });
   if (!res.ok) throw new Error("Erreur suppression");
