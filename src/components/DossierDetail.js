@@ -14,16 +14,20 @@ import { useToast } from "../ui/Toast";
 import { useConfirm } from "../ui/Confirm";
 
 // Panneau de détail d'un dossier sélectionné.
-export function DossierDetail({ dossier: d, onValidate, onDelete }) {
+export function DossierDetail({ dossier: d, onValidate, onTogglePiece, onDelete }) {
   const toast = useToast();
   const confirm = useConfirm();
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(null);
+  const [toggling, setToggling] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
   const typeInfo = DOSSIER_TYPES[d.type];
   const TypeIcon = typeInfo?.Icon || Folder;
-  const pct = Math.round((d.pieces.filter((p) => p.status !== "MANQUANT").length / d.pieces.length) * 100);
+  const active = d.pieces.filter((p) => !p.excluded);
+  const pct = active.length
+    ? Math.round((active.filter((p) => p.status !== "MANQUANT").length / active.length) * 100)
+    : 0;
   const clientUrl = getClientUrl(d.token);
 
   const copyLink = () => {
@@ -41,6 +45,16 @@ export function DossierDetail({ dossier: d, onValidate, onDelete }) {
       toast.success(status === "VALIDE" ? "Pièce validée" : "Pièce refusée — le client sera invité à la refaire");
     } finally {
       setSaving(null);
+    }
+  };
+
+  const handleToggleRequired = async (code, excluded) => {
+    setToggling(code);
+    try {
+      await onTogglePiece(d.id, code, excluded);
+      toast.success(excluded ? "Pièce marquée non requise" : "Pièce de nouveau requise");
+    } finally {
+      setToggling(null);
     }
   };
 
@@ -218,83 +232,109 @@ L'équipe Plio`
       </div>
 
       {/* Pièces */}
-      <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15, color: "var(--heading)", marginBottom: 12 }}>
-        Pièces justificatives
+      <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline", marginBottom: 12, flexWrap: "wrap", gap: 6 }}>
+        <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15, color: "var(--heading)" }}>
+          Pièces justificatives
+        </span>
+        <span style={{ color: "var(--faint)", fontSize: 11.5 }}>
+          Décochez les pièces non nécessaires pour ce client
+        </span>
       </div>
-      {Object.entries(bycat).map(([cat, catPieces]) => (
-        <div key={cat} style={{ marginBottom: 16 }}>
-          <div className="row gap-8" style={{ marginBottom: 8 }}>
-            <Folder size={14} color="var(--brand)" />
-            <span style={{ color: "var(--heading)", fontSize: 13, fontWeight: 700 }}>{cleanCategory(cat)}</span>
-            <span style={{ color: "var(--muted)", fontSize: 11.5 }}>
-              ({catPieces.filter((p) => p.status !== "MANQUANT").length}/{catPieces.length} reçues)
-            </span>
-          </div>
-          <div className="col gap-6">
-            {catPieces.map((p) => (
-              <div
-                key={p.code}
-                className="card"
-                style={{ padding: "11px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}
-              >
-                <div className="grow">
-                  <div style={{ color: "var(--text)", fontSize: 13.5, fontWeight: 600 }}>{p.label}</div>
-                  <div className="mono" style={{ color: "var(--faint)", fontSize: 10.5, marginTop: 2 }}>{p.code}</div>
-                  {p.file && p.file.url && (
-                    <div className="row gap-4" style={{ color: "var(--muted)", fontSize: 11.5, marginTop: 4 }}>
-                      <FileText size={12} /> {p.file.name} · {formatSize(p.file.size)}
-                      {p.file.uploadedAt && <span>· reçu le {new Date(p.file.uploadedAt).toLocaleDateString("fr-FR")}</span>}
+      {Object.entries(bycat).map(([cat, catPieces]) => {
+        const catActive = catPieces.filter((p) => !p.excluded);
+        return (
+          <div key={cat} style={{ marginBottom: 16 }}>
+            <div className="row gap-8" style={{ marginBottom: 8 }}>
+              <Folder size={14} color="var(--brand)" />
+              <span style={{ color: "var(--heading)", fontSize: 13, fontWeight: 700 }}>{cleanCategory(cat)}</span>
+              <span style={{ color: "var(--muted)", fontSize: 11.5 }}>
+                ({catActive.filter((p) => p.status !== "MANQUANT").length}/{catActive.length} reçues)
+              </span>
+            </div>
+            <div className="col gap-6">
+              {catPieces.map((p) => (
+                <div
+                  key={p.code}
+                  className="card"
+                  style={{ padding: "11px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap", opacity: p.excluded ? 0.6 : 1 }}
+                >
+                  <div className="row gap-10 grow" style={{ alignItems: "flex-start" }}>
+                    <input
+                      type="checkbox"
+                      checked={!p.excluded}
+                      disabled={toggling === p.code}
+                      onChange={(e) => handleToggleRequired(p.code, !e.target.checked)}
+                      title={p.excluded ? "Rendre cette pièce requise" : "Marquer comme non requise pour ce client"}
+                      style={{ width: 16, height: 16, marginTop: 2, accentColor: "var(--brand)", flexShrink: 0, cursor: "pointer" }}
+                    />
+                    <div className="grow">
+                      <div style={{ color: "var(--text)", fontSize: 13.5, fontWeight: 600, textDecoration: p.excluded ? "line-through" : "none" }}>{p.label}</div>
+                      <div className="mono" style={{ color: "var(--faint)", fontSize: 10.5, marginTop: 2 }}>{p.code}</div>
+                      {!p.excluded && p.file && p.file.url && (
+                        <div className="row gap-4" style={{ color: "var(--muted)", fontSize: 11.5, marginTop: 4 }}>
+                          <FileText size={12} /> {p.file.name} · {formatSize(p.file.size)}
+                          {p.file.uploadedAt && <span>· reçu le {new Date(p.file.uploadedAt).toLocaleDateString("fr-FR")}</span>}
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
+                  <div className="row gap-6" style={{ flexShrink: 0 }}>
+                    {p.excluded ? (
+                      <span style={{ fontSize: 11.5, color: "var(--muted)", fontWeight: 600, background: "var(--bg)", padding: "3px 10px", borderRadius: 20 }}>
+                        Non requise
+                      </span>
+                    ) : (
+                      <>
+                        <StatusBadge status={p.status} />
+                        {p.file && p.file.url && (
+                          <a className="btn btn-soft btn-sm" href={p.file.url} target="_blank" rel="noreferrer" download>
+                            <ExternalLink size={14} /> Voir
+                          </a>
+                        )}
+                        {p.status === "RECU" && (
+                          <>
+                            <Button variant="success" size="sm" loading={saving === p.code} onClick={() => handlePiece(p.code, "VALIDE")} icon={CheckCircle2}>
+                              Valider
+                            </Button>
+                            <Button variant="danger" size="sm" loading={saving === p.code} onClick={() => handlePiece(p.code, "REFUSE")} icon={XCircle}>
+                              Refuser
+                            </Button>
+                          </>
+                        )}
+                        {p.status === "MANQUANT" && (
+                          <>
+                            <input
+                              id={"upload-" + p.code}
+                              type="file"
+                              accept=".pdf,.jpg,.jpeg,.png"
+                              style={{ display: "none" }}
+                              onChange={(e) => {
+                                const f = e.target.files && e.target.files[0];
+                                if (f) handleManualUpload(p.code, f);
+                                e.target.value = "";
+                              }}
+                            />
+                            <Button
+                              variant="upload"
+                              size="sm"
+                              loading={saving === p.code}
+                              icon={Download}
+                              onClick={() => document.getElementById("upload-" + p.code).click()}
+                              title="Ajouter ce document reçu par email"
+                            >
+                              Ajouter
+                            </Button>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
-                <div className="row gap-6" style={{ flexShrink: 0 }}>
-                  <StatusBadge status={p.status} />
-                  {p.file && p.file.url && (
-                    <a className="btn btn-soft btn-sm" href={p.file.url} target="_blank" rel="noreferrer" download>
-                      <ExternalLink size={14} /> Voir
-                    </a>
-                  )}
-                  {p.status === "RECU" && (
-                    <>
-                      <Button variant="success" size="sm" loading={saving === p.code} onClick={() => handlePiece(p.code, "VALIDE")} icon={CheckCircle2}>
-                        Valider
-                      </Button>
-                      <Button variant="danger" size="sm" loading={saving === p.code} onClick={() => handlePiece(p.code, "REFUSE")} icon={XCircle}>
-                        Refuser
-                      </Button>
-                    </>
-                  )}
-                  {p.status === "MANQUANT" && (
-                    <>
-                      <input
-                        id={"upload-" + p.code}
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        style={{ display: "none" }}
-                        onChange={(e) => {
-                          const f = e.target.files && e.target.files[0];
-                          if (f) handleManualUpload(p.code, f);
-                          e.target.value = "";
-                        }}
-                      />
-                      <Button
-                        variant="upload"
-                        size="sm"
-                        loading={saving === p.code}
-                        icon={Download}
-                        onClick={() => document.getElementById("upload-" + p.code).click()}
-                        title="Ajouter ce document reçu par email"
-                      >
-                        Ajouter
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* Actions rapides */}
       <div className="card" style={{ padding: 16, marginTop: 8 }}>
