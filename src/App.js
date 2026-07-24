@@ -3,7 +3,7 @@ import { DOSSIER_TYPES, buildPieces } from "./data/dossierTypes";
 import { generateToken } from "./lib/token";
 import { genId } from "./lib/format";
 import {
-  apiGetDossiers, apiCreateDossier, apiUpdatePiece, apiDeleteDossier, apiResetDemo,
+  apiGetDossiers, apiCreateDossier, apiUpdatePiece, apiSetPieceExcluded, apiDeleteDossier, apiResetDemo,
 } from "./lib/api";
 import { useToast } from "./ui/Toast";
 import { LoginPage } from "./pages/LoginPage";
@@ -60,6 +60,16 @@ export default function App() {
       setDossiers((prev) => prev.map((d) => (d.id === dossierId ? updated : d)));
     } catch (e) {
       console.error("Erreur mise à jour:", e);
+      toast.error("Mise à jour de la pièce : " + e.message);
+    }
+  };
+
+  const handleTogglePiece = async (dossierId, pieceCode, excluded) => {
+    try {
+      const updated = await apiSetPieceExcluded(dossierId, pieceCode, excluded);
+      setDossiers((prev) => prev.map((d) => (d.id === dossierId ? updated : d)));
+    } catch (e) {
+      console.error("Erreur mise à jour pièce:", e);
       toast.error("Mise à jour de la pièce : " + e.message);
     }
   };
@@ -124,6 +134,7 @@ export default function App() {
         dossiers={dossiers}
         loading={loadingData}
         onValidate={handleValidate}
+        onTogglePiece={handleTogglePiece}
         onNewDossier={() => setShowNew(true)}
         onLogout={() => {
           sessionStorage.removeItem("plio_auth");
